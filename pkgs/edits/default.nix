@@ -9,7 +9,7 @@
   libiconv,
   darwin,
   evcxr,
-  cargo-tarpaulin
+  cargo-tarpaulin-develop
 }:
 rustPlatform.buildRustPackage rec {
   pname = "edits";
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config # for openssl
     evcxr
-  ] ++ lib.optional hostPlatform.isDarwin [ cargo-tarpaulin ];
+  ] ++ lib.optional hostPlatform.isDarwin [ cargo-tarpaulin-develop ];
 
   meta = with lib; {
     description = "This library displays the difference between 2 strings using the Levenshtein distance";
