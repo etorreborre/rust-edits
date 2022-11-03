@@ -1,6 +1,7 @@
 {
   self,
   lib,
+  callPackage,
   rustPlatform,
   hostPlatform,
   # you can add imports here
@@ -9,9 +10,16 @@
   libiconv,
   darwin,
   evcxr,
-  cargo-tarpaulin-develop
+  cargo-tarpaulin
 }:
-rustPlatform.buildRustPackage rec {
+
+let
+  cargo-tarpaulin-develop =
+    if hostPlatform.isDarwin then
+      callPackage ./cargo-tarpaulin-darwin.nix { }
+    else cargo-tarpaulin;
+
+in rustPlatform.buildRustPackage rec {
   pname = "edits";
   version = "1.0.0";
   src = self; # + "/src";
@@ -60,7 +68,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config # for openssl
     evcxr
-  ] ++ lib.optional hostPlatform.isDarwin [ cargo-tarpaulin-develop ];
+    cargo-tarpaulin-develop
+  ];
 
   meta = with lib; {
     description = "This library displays the difference between 2 strings using the Levenshtein distance";
