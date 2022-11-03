@@ -9,9 +9,12 @@
   libiconv,
   darwin,
   evcxr,
-  cargo-tarpaulin-develop
+  cargo-tarpaulin-develop,
+  clippy,
+  rustfmt,
 }:
 rustPlatform.buildRustPackage rec {
+  RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
   pname = "edits";
   version = "1.0.0";
   src = self; # + "/src";
@@ -60,6 +63,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config # for openssl
     evcxr
+    clippy
+    rustfmt
   ] ++ lib.optional hostPlatform.isDarwin [ cargo-tarpaulin-develop ];
 
   meta = with lib; {
