@@ -19,9 +19,7 @@
 let
   cargo-tarpaulin-develop =
     if hostPlatform.isDarwin then
-      callPackage ./cargo-tarpaulin-darwin.nix {
-         inputs = inputs;
-       }
+      callPackage ./cargo-tarpaulin-darwin.nix { inherit inputs; }
     else cargo-tarpaulin;
 
 in rustPlatform.buildRustPackage rec {
