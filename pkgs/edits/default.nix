@@ -1,6 +1,8 @@
 {
   self,
+  inputs,
   lib,
+  callPackage,
   rustPlatform,
   hostPlatform,
   # you can add imports here
@@ -9,11 +11,21 @@
   libiconv,
   darwin,
   evcxr,
-  cargo-tarpaulin-develop,
+  cargo-tarpaulin,
   clippy,
   rustfmt,
 }:
-rustPlatform.buildRustPackage rec {
+
+let
+  cargo-tarpaulin-develop =
+    if hostPlatform.isDarwin then
+      callPackage ./cargo-tarpaulin-darwin.nix {
+         inputs = inputs;
+       }
+    else cargo-tarpaulin;
+
+in rustPlatform.buildRustPackage rec {
+  # this is necessary for vs code / rust-analyzer to find the rust-src library
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
   pname = "edits";
   version = "1.0.0";
@@ -65,7 +77,8 @@ rustPlatform.buildRustPackage rec {
     evcxr
     clippy
     rustfmt
-  ] ++ lib.optional hostPlatform.isDarwin [ cargo-tarpaulin-develop ];
+    cargo-tarpaulin-develop
+  ];
 
   meta = with lib; {
     description = "This library displays the difference between 2 strings using the Levenshtein distance";
