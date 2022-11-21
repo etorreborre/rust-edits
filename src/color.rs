@@ -23,6 +23,7 @@ impl ColorAs for String {
     }
 }
 
+// A char can be colored
 impl ColorAs for char {
     // Surround a string with ASCII control characters to color it
     fn color_as(self, c: Color) -> String {
