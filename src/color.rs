@@ -30,6 +30,7 @@ impl ColorAs for char {
     }
 }
 
+// return the ANSI code for a given color
 fn code(c: Color) -> String {
     match c {
         Black => "30",
